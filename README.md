@@ -2,7 +2,7 @@
 
 [LangChain-mini](https://github.com/ColinEberhardt/langchain-mini) but in that ferrous oxide language
 
-## Conjecture
+## Posit...
 
 > if i was to ask you to convert some Javascript ESM code to Rust, what version of Rust would you target?
 
@@ -33,6 +33,20 @@ Some specific Rust features I would leverage would be:
 
 The end result would not be a line-for-line conversion, but idiomatic Rust code in the spirit of the original 
 ES6 source, taking advantage of Rust's strengths like static typing, ownership, and concurrency.
+
+Let me know if you have any other questions!
+```
+
+> Ok, please translate this javascript ESM module to Rust 2018 edition:
+
+```
+This translates the full JavaScript module by:
+
+    Using serpapi and reqwest for HTTP requests
+    Using rustyline for the REPL
+    Using the eval crate for evaluation the calculator inputs
+    Calling the OpenAI API to complete prompts
+    Looping to continue a conversation and build up context
 
 Let me know if you have any other questions!
 ```
