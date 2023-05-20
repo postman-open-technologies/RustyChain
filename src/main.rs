@@ -1,16 +1,14 @@
 use serde_json::Value;
 use std::env;
 use std::fs;
-
-// Use serpapi to answer questions
-async fn google_search(question: &str) -> Option<String> {
-    let api_key = env::var("SERPAPI_API_KEY")?;
-    let url = format!("https://serpapi.com/search?api_key={}&q={}", api_key, question);
+    
+// Use Bing Search API to answer questions
+async fn bing_search(question: &str) -> Option<String> {
+    let api_key = env::var("BING_SEARCH_API_KEY")?;
+    let url = format!("https://api.bing.microsoft.com/a66fa414-3d6b-4925-88e1-21dec2c33a00/bing/v7.0/search?q={}&mkt=en-us&form=WNSG1", question);
     let resp = reqwest::get(&url).await?;
     let data: Value = resp.json().await?;
-    data["answer_box"]["answer"].as_str().or(data["answer_box"]["snippet"].as_str())
-        .or(data["organic_results"][0]["snippet"].as_str())
-        .map(String::from)
+    data["webPages"]["value"][0]["snippet"].as_str().map(String::from)
 }
 
 // Tools that can be used to answer questions
@@ -18,6 +16,13 @@ struct Tools {
     search: (fn(String) -> Option<String>, &'static str),
     calculator: (fn(String) -> String, &'static str), 
 }
+    
+let tools = Tools {
+        search: (bing_search, "a search engine. useful for answering questions about current events. input should be a search query."), 
+        calculator: (|input| eval::eval(&input).to_string(), 
+                     "Useful for getting the result of a mathematical expression. The input to this tool \
+                     should be a valid mathematical expression that could be executed by a scientific \
+                     calculator.")
 
 // Use GPT-3.5 to complete prompts
 async fn complete_prompt(prompt: String, openai_key: &str) -> String {
