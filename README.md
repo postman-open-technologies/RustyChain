@@ -50,3 +50,10 @@ This translates the full JavaScript module by:
 
 Let me know if you have any other questions!
 ```
+
+> ok, but please subsitute the Microsoft Bing search API for the serpapi API.
+
+```
+Here is the updated code using the Bing Search API instead of serpapi...
+```
+
