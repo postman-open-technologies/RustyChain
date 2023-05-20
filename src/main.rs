@@ -13,7 +13,7 @@ const bing_api_key: String = env::var("BING_SEARCH_API_KEY").unwrap();
 async fn bing_search(question: &str) -> Option<String> {
     let url = format!("https://api.bing.microsoft.com/v7.0/search?q=${question}");
     let resp = reqwest::get(&url, { "Ocp-Apim-Subscription-Key": HeaderValue = bing_api_key }: HeaderMap).await.unwrap();
-    let data: Value = resp.unwrap().json().await.unwrap();
+    let data: Value = resp.json().await.unwrap();
     data["webPages"]["value"][0]["snippet"].as_str().map(String::from)
 }
 
@@ -42,12 +42,12 @@ async fn complete_prompt(prompt: String) -> String {
         "stop": ["Observation:"]
     });
     let resp = reqwest::Client::new()
-        .post(&url)
+        .post(url)
         .header("Authorization", format!("Bearer {}", openai_key))
         .json(&body)
         .send()
-        .await?;
-    let choices = resp.json::<Value>().await?;
+        .await.unwrap();
+    let choices = resp.json::<Value>().await.unwrap();
     choices["choices"][0]["text"].as_str().unwrap().to_string()
 } 
 
